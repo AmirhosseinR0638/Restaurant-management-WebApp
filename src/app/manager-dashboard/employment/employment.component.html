@@ -1,0 +1,63 @@
+<button
+  type="button"
+  id="closeBtn"
+  mat-icon-button
+  (click)="closeEmploymentComponent()"
+>
+  <img
+    src="../../../assets/bg&img/close_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.png"
+    alt="بستن"
+  />
+</button>
+<div class="container">
+  <div class="title">
+    <h3>استخدام {{ formMode }}</h3>
+  </div>
+  <div class="header">
+    <h4>سمت استخدامی:</h4>
+    <mat-radio-group (change)="changeFormMode($event)">
+      <mat-radio-button [value]="'صندوقدار'" checked>صندوقدار</mat-radio-button>
+      <mat-radio-button [value]="'پیشخدمت'">پیشخدمت</mat-radio-button>
+    </mat-radio-group>
+  </div>
+  <div class="form">
+    <form [formGroup]="employmentForm" (ngSubmit)="formSubmitted()">
+      <mat-form-field hideRequiredMarker="true">
+        <mat-label>نام</mat-label>
+        <input matInput type="text" formControlName="firstName" />
+      </mat-form-field>
+      <mat-form-field hideRequiredMarker="true">
+        <mat-label>نام خانوادگی</mat-label>
+        <input matInput type="text" formControlName="lastName" />
+      </mat-form-field>
+      <div class="inside">
+        <mat-form-field hideRequiredMarker="true">
+          <mat-label>سن</mat-label>
+          <input matInput type="number" formControlName="age" />
+        </mat-form-field>
+        <mat-form-field hideRequiredMarker="true">
+          <mat-label>جنسیت</mat-label>
+          <mat-select dir="rtl" formControlName="gender">
+            <mat-option [value]="'آقا'">آقا</mat-option>
+            <mat-option [value]="'خانم'">خانم</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <mat-form-field hideRequiredMarker="true">
+        <mat-label>نام کاربری</mat-label>
+        <input matInput type="text" formControlName="username" />
+      </mat-form-field>
+      <mat-form-field hideRequiredMarker="true">
+        <mat-label>رمز عبور</mat-label>
+        <input matInput type="text" formControlName="password" />
+      </mat-form-field>
+      <mat-form-field hideRequiredMarker="true">
+        <mat-label>حقوق</mat-label>
+        <input matInput type="text" formControlName="salary" />
+      </mat-form-field>
+      <button type="submit" mat-flat-button [disabled]="employmentForm.invalid">
+        استخدام {{ formMode }}
+      </button>
+    </form>
+  </div>
+</div>

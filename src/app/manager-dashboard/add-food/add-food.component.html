@@ -1,0 +1,76 @@
+<button
+  type="button"
+  id="closeBtn"
+  mat-icon-button
+  (click)="closeAddFoodComponent()"
+>
+  <img
+    src="../../../assets/bg&img/close_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.png"
+    alt="بستن"
+  />
+</button>
+<div class="container">
+  <div class="title">
+    <h2>افزودن غذا</h2>
+  </div>
+  <div class="form">
+    <form [formGroup]="foodForm" (ngSubmit)="formSubmitted()">
+      <mat-form-field hideRequiredMarker>
+        <mat-label>دسته بندی</mat-label>
+        <mat-select formControlName="category" dir="rtl">
+          <mat-option value="ساندویچ سرد">ساندویچ سرد</mat-option>
+          <mat-option value="ساندویچ گرم">ساندویچ گرم</mat-option>
+          <mat-option value="پیتزا ایتالیایی">پیتزا ایتالیایی</mat-option>
+          <mat-option value="پیتزا آمریکایی">پیتزا آمریکایی</mat-option>
+          <mat-option value="برگر">برگر</mat-option>
+          <mat-option value="پاستا و لازانیا">پاستا و لازانیا</mat-option>
+          <mat-option value="سوخاری">سوخاری</mat-option>
+          <mat-option value="پیش غذا">پیش غذا</mat-option>
+          <mat-option value="سالاد">سالاد</mat-option>
+          <mat-option value="نوشیدنی">نوشیدنی</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field hideRequiredMarker>
+        <mat-label>نام {{ foodForm.value.category }}</mat-label>
+        <input type="text" matInput formControlName="foodName" />
+      </mat-form-field>
+      <div class="inside">
+        <mat-form-field hideRequiredMarker>
+          <mat-label>قیمت</mat-label>
+          <span matTextSuffix>تومان</span>
+          <input
+            type="number"
+            matInput
+            formControlName="price"
+            (ngModelChange)="getPrice($event)"
+          />
+          <mat-hint
+            [hidden]="
+              !foodForm.controls['discountPercentage'].dirty ||
+              !foodForm.controls['price'].dirty
+            "
+            >قیمت نهایی با اعمال تخفیف:
+            {{ calculateFinalPrice() + " تومان" }}</mat-hint
+          >
+        </mat-form-field>
+        <mat-form-field hideRequiredMarker>
+          <mat-label>تخفیف</mat-label>
+          <span matTextSuffix>%</span>
+          <input
+            type="number"
+            matInput
+            formControlName="discountPercentage"
+            (ngModelChange)="getDiscount($event)"
+          />
+        </mat-form-field>
+      </div>
+      <mat-form-field hideRequiredMarker>
+        <mat-label>تعداد سرو های روزانه</mat-label>
+        <input type="number" matInput formControlName="numberOfDailyServe" />
+      </mat-form-field>
+      <button [disabled]="foodForm.invalid" type="submit" mat-flat-button>
+        اضافه کردن غذا
+      </button>
+    </form>
+  </div>
+</div>

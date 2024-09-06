@@ -1,0 +1,169 @@
+<div class="container">
+  @if (showClientForm) {
+  <app-create-client
+    (clientFormVisibility)="toggleClientFormVisibility($event)"
+  ></app-create-client>
+  } @if (showOrderForm) {
+  <app-order-form
+    (orderFormVisibility)="toggleOrderFormVisibility($event)"
+    (showCreateClientForm)="showCreateClientForm()"
+  ></app-order-form>
+  } @if (showMessenger) {
+  <app-messenger
+    (messengerVisibility)="toggleMessengerVisibility($event)"
+  ></app-messenger>
+  } @if(showProfile){
+  <app-profile [cashierInformation]="cashierInformation"></app-profile>
+  }
+  <div class="menu">
+    <div class="right">
+      <button
+        type="button"
+        mat-flat-button
+        (click)="toggleClientFormVisibility(true)"
+      >
+        ایجاد اشتراک برای مشتری
+      </button>
+      <button
+        type="button"
+        mat-flat-button
+        (click)="toggleOrderFormVisibility(true)"
+      >
+        ثبت سفارش
+      </button>
+      <button
+        type="button"
+        mat-flat-button
+        (click)="toggleMessengerVisibility(true)"
+      >
+        پیام ها
+      </button>
+    </div>
+    <div class="left">
+      <div
+        class="profile"
+        (mouseover)="showProfile = true"
+        (mouseleave)="showProfile = false"
+      >
+        <a>{{ cashierInformation.userName }}</a>
+        <div class="image">
+          <img
+            [src]="
+              cashierInformation.gender == 'آقا'
+                ? '../../assets/bg&img/manWithoutProfile.png'
+                : '../../assets/bg&img/womanWithoutProfile.png'
+            "
+            alt="profile"
+            draggable="false"
+          />
+        </div>
+      </div>
+      <button type="button" mat-flat-button (click)="logOut()">خروج</button>
+    </div>
+  </div>
+  <div class="content">
+    <div class="orders">
+      <div class="topSide">
+        <div class="right">
+          <h3>سفارشات</h3>
+        </div>
+        <div class="left">
+          <h4>تعداد کل سفارشات: {{ orders.length }}</h4>
+          <button mat-icon-button (click)="fetchOrders()">
+            <img
+              src="../../assets/bg&img/refresh_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.png"
+              alt="بارگیری مجدد"
+              title="بارگیری مجدد"
+            />
+          </button>
+        </div>
+      </div>
+      <div class="inside">
+        @if (showOrderLoader) {
+        <div class="loader">
+          <h5>لطفا چند لحظه صبر کنید...</h5>
+        </div>
+        } @for (order of orders; track $index) {
+        <div
+          [ngClass]="{
+            order: true,
+            isPaid: order.isPaid,
+            notPaid: !order.isPaid
+          }"
+        >
+          <div class="top">
+            <div>
+              <h5>کد سفارش: {{ order.orderId.slice(1) }}</h5>
+            </div>
+            <div>
+              <h5>نام مشتری: {{ order.clientName }}</h5>
+            </div>
+            <div>
+              <h5>نوع سفارش: {{ order.orderType }}</h5>
+            </div>
+          </div>
+          <div class="bottom">
+            <div>
+              <h5>قیمت: {{ order.totalPrice + " تومان" }}</h5>
+            </div>
+            <button mat-icon-button (click)="deleteOrder(order.id)">
+              <mat-icon
+                ><img
+                  src="../../assets/bg&img/delete_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.png"
+                  alt="حذف سفارش"
+                  title="حذف سفارش"
+              /></mat-icon>
+            </button>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+    <div class="tables">
+      <div class="topSide">
+        <div class="right">
+          <h3>میزها</h3>
+        </div>
+        <div class="left">
+          <h4>تعداد میز های رزرو نشده: {{ notReservedTables }}</h4>
+          <button mat-icon-button (click)="fetchTables()">
+            <img
+              src="../../assets/bg&img/refresh_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.png"
+              alt="بارگیری مجدد"
+              title="بارگیری مجدد"
+            />
+          </button>
+        </div>
+      </div>
+      <div class="tablesContainer">
+        @if (showTableLoader) {
+        <div class="loader">
+          <h5>لطفا چند لحظه صبر کنید...</h5>
+        </div>
+        } @for (table of tables; track $index) {
+        <div
+          class="table"
+          [ngClass]="{
+            isReserved: table.isReserved,
+            notReserved: !table.isReserved
+          }"
+        >
+          <div class="number">
+            <h5>شماره میز: {{ table.number }}</h5>
+          </div>
+          <div class="capacity">
+            <h5>ظرفیت میز: {{ table.capacity }}</h5>
+          </div>
+          <button
+            type="button"
+            mat-flat-button
+            (click)="toggleTableSituation(table)"
+          >
+            {{ table.isReserved ? "خالی کردن میز" : "رزرو کردن میز" }}
+          </button>
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,98 @@
+<div class="container">
+  <button
+    type="button"
+    id="closeBtn"
+    mat-icon-button
+    (click)="toggleMessengerVisibility()"
+  >
+    <img
+      src="../../../assets/bg&img/close_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.png"
+      alt="بستن"
+    />
+  </button>
+  <div class="content">
+    <div class="top">
+      <div class="title"><h3>پیام ها</h3></div>
+      <div class="reload">
+        <button type="button" mat-icon-button (click)="fetchMessages()">
+          <mat-icon
+            ><img
+              src="../../../assets/bg&img/refresh_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.png"
+              alt="بارگیری مجدد پیام ها"
+              title="بارگیری مجدد پیام ها"
+          /></mat-icon>
+        </button>
+      </div>
+    </div>
+    <div class="bottom">
+      <div class="messages">
+        @if (showLoader) {
+        <div class="loader">
+          <h5>لطفا چند لحظه صبر کنید...</h5>
+        </div>
+        } @else { @for (message of messages; track $index) { @if(message.sender
+        == 'cashier') {
+        <div class="cashierMsg">
+          <div class="left">
+            <p class="msg">{{ message.message }}</p>
+            <p class="time">{{ message.time }}</p>
+          </div>
+          <div class="right">
+            @if (message.isDone) {
+            <div class="situation">
+              <mat-icon
+                ><img
+                  src="../../../assets/bg&img/check_24dp_000000_FILL0_wght400_GRAD0_opsz24.png"
+                  alt="انجام شده"
+                  title="انجام شده"
+              /></mat-icon>
+            </div>
+            } @else {
+            <div class="situation">
+              <mat-icon
+                ><img
+                  src="../../../assets/bg&img/check_indeterminate_small_24dp_000000_FILL0_wght400_GRAD0_opsz24.png"
+                  alt="انجام نشده"
+                  title="انجام نشده"
+              /></mat-icon>
+            </div>
+            }
+            <div class="delete" (click)="deleteMessage(message.id)">
+              <mat-icon
+                ><img
+                  src="../../../assets/bg&img/delete_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.png"
+                  alt="حذف پیام"
+                  title="حذف پیام"
+              /></mat-icon>
+            </div>
+          </div>
+        </div>
+        } @else{
+        <div class="waiterMsg">
+          <p class="msg">{{ message.message }}</p>
+          <p class="time">{{ message.time }}</p>
+        </div>
+        } } }
+      </div>
+      <div class="sendInput">
+        <mat-form-field>
+          <mat-label>پیام خود را بنویسید...</mat-label>
+          <textarea matInput #messageInput></textarea>
+        </mat-form-field>
+        <button
+          [disabled]="messageInput.value == ''"
+          type="button"
+          mat-icon-button
+          (click)="sendMessage(messageInput.value)"
+        >
+          <mat-icon
+            ><img
+              src="../../../assets/bg&img/send_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png"
+              alt="ارسال پیام"
+              title="ارسال پیام"
+          /></mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

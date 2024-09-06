@@ -1,0 +1,25 @@
+<div class="container">
+  <div class="header"><h2>پروفایل پیشخدمت</h2></div>
+  <div class="picture">
+    <div class="figure">
+      <img
+        [src]="
+          waiterInformation.gender == 'آقا'
+            ? '../../../assets/bg&img/manWithoutProfile.png'
+            : '../../../assets/bg&img/womanWithoutProfile.png'
+        "
+        [alt]="waiterInformation.firstName + ' ' + waiterInformation.lastName"
+        [title]="waiterInformation.firstName + ' ' + waiterInformation.lastName"
+      />
+    </div>
+  </div>
+  <div class="info">
+    <p>نام: {{waiterInformation.firstName}}</p>
+    <p>نام خانوادگی: {{waiterInformation.lastName}}</p>
+    <p>جنسیت: {{waiterInformation.gender}}</p>
+    <p>سن: {{waiterInformation.age + ' سال'}}</p>
+    <p>نام کاربری: {{waiterInformation.userName}}</p>
+    <p>رمز عبور: {{waiterInformation.password}}</p>
+    <p>حقوق دریافتی: {{waiterInformation.salary + ' تومان'}}</p>
+  </div>
+</div>

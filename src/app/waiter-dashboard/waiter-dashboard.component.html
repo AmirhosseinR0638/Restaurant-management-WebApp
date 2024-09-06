@@ -1,0 +1,182 @@
+<div class="main">
+  <div class="menu">
+    <div
+      class="profile"
+      (mouseenter)="toggleProfileVisibility()"
+      (mouseleave)="toggleProfileVisibility()"
+    >
+      <a>{{
+        waiterInformation.firstName + " " + waiterInformation.lastName
+      }}</a>
+      <div class="image">
+        <img
+          [src]="
+            waiterInformation.gender == 'آقا'
+              ? '../../assets/bg&img/manWithoutProfile.png'
+              : '../../assets/bg&img/womanWithoutProfile.png'
+          "
+          [alt]="waiterInformation.firstName + ' ' + waiterInformation.lastName"
+          [title]="
+            waiterInformation.firstName + ' ' + waiterInformation.lastName
+          "
+        />
+      </div>
+    </div>
+    <button type="button" (click)="logOut()">خروج</button>
+  </div>
+  <div class="content">
+    <div class="rightSide">
+      <div class="topSide">
+        <div class="title"><h3>پیام ها</h3></div>
+        <button type="button" mat-icon-button (click)="fetchMessages()">
+          <mat-icon
+            ><img
+              src="../../assets/bg&img/refresh_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.png"
+              alt="بارگزاری مجدد"
+              title="بارگزاری مجدد"
+          /></mat-icon>
+        </button>
+      </div>
+      <div class="messages">
+        @if (messages.length ==0) {
+        <p id="loader">لطفا چند لحظه صبرکنید...</p>
+        } @else { @for (message of messages; track $index) { @if(message.sender
+        == 'waiter') {
+        <div class="waiterMsg">
+          <div class="right">
+            <p class="msg">{{ message.message }}</p>
+            <p class="time">{{ message.time }}</p>
+          </div>
+          <div class="left">
+            <div class="delete" (click)="deleteMessage(message.id)">
+              <mat-icon
+                ><img
+                  src="../../../assets/bg&img/delete_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.png"
+                  alt="حذف پیام"
+                  title="حذف پیام"
+              /></mat-icon>
+            </div>
+          </div>
+        </div>
+        } @else{
+        <div class="cashierMsg">
+          <div class="right">
+            <p class="msg">{{ message.message }}</p>
+            <p class="time">{{ message.time }}</p>
+          </div>
+          <div class="left">
+            <mat-checkbox
+              title="انجام شد"
+              [disabled]="message.isDone"
+              [checked]="message.isDone"
+              (change)="messageChecked(message.id, message.isDone)"
+            ></mat-checkbox>
+          </div>
+        </div>
+        } } }
+      </div>
+      <div class="input">
+        <mat-form-field>
+          <mat-label>پیام خود را بنویسید...</mat-label>
+          <textarea matInput #msgInput></textarea>
+        </mat-form-field>
+        <button
+          [disabled]="msgInput.value == ''"
+          type="button"
+          mat-icon-button
+          (click)="sendMessage(msgInput.value)"
+        >
+          <mat-icon>
+            <img
+              src="../../assets/bg&img/send_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png"
+              alt="ارسال پیام"
+              title="ارسال پیام"
+            />
+          </mat-icon>
+        </button>
+      </div>
+    </div>
+    <div class="leftSide">
+      <div class="top">
+        <div class="header">
+          <div class="right">
+            <h3>سفارشات</h3>
+          </div>
+          <div class="left">
+            <div class="title">
+              <h4>تعداد سفارشات حضوری: {{ orders.length }}</h4>
+            </div>
+            <button type="button" mat-icon-button (click)="fetchOrders()">
+              <mat-icon
+                ><img
+                  src="../../assets/bg&img/refresh_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.png"
+                  alt="بارگزاری مجدد"
+                  title="بارگزاری مجدد"
+              /></mat-icon>
+            </button>
+          </div>
+        </div>
+        <div class="container">
+          @if (orders.length == 0) {
+          <p>لطفا چند لحظه صبرکنید...</p>
+          } @else { @for (order of orders; track $index) {
+          <div class="item" [ngClass]="order.isPaid ? 'isPaid' : 'notPaid'">
+            <div>
+              <h5>کد سفارش: {{ order.orderId }}</h5>
+            </div>
+            <div>
+              <h5>نام مشتری: {{ order.clientName }}</h5>
+            </div>
+          </div>
+          } }
+        </div>
+      </div>
+      <div class="bottom">
+        <div class="header">
+          <div class="right">
+            <h3>میزها</h3>
+          </div>
+          <div class="left">
+            <div class="title"><h4>تعداد میز های رزرو نشده: 8</h4></div>
+            <button type="button" mat-icon-button (click)="fetchTables()">
+              <mat-icon
+                ><img
+                  src="../../assets/bg&img/refresh_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.png"
+                  alt="بارگزاری مجدد"
+                  title="بارگزاری مجدد"
+              /></mat-icon>
+            </button>
+          </div>
+        </div>
+        <div class="container">
+          @if (tables.length ==0) {
+          <p>لطفا چند لحظه صبرکنید...</p>
+          } @else { @for (table of tables; track $index) {
+          <div
+            class="item"
+            [ngClass]="table.isReserved ? 'isReserved' : 'notReserved'"
+          >
+            <div>
+              <h5>شماره میز: {{ table.number }}</h5>
+            </div>
+            <div>
+              <h5>ظرفیت میز: {{ table.capacity }} نفر</h5>
+            </div>
+            <button
+              type="button"
+              mat-flat-button
+              (click)="toggleTableSituation(table.id, table.isReserved)"
+            >
+              {{ table.isReserved ? "خالی کردن میز" : "رزرو میز" }}
+            </button>
+          </div>
+          }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-waiter-profile
+  [hidden]="hideProfile"
+  [waiterInformation]="waiterInformation"
+></app-waiter-profile>

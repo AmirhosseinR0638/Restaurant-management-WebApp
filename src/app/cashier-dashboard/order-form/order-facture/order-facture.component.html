@@ -1,0 +1,102 @@
+<div class="container">
+  <div class="first">
+    <div class="right">
+      <div class="up"><h2>فاکتور سفارش</h2></div>
+      <div class="down">
+        <h4>کد سفارش: {{ data.orderId.slice(1) }}</h4>
+        <h4>تاریخ: {{ data.orderData.date }}</h4>
+      </div>
+    </div>
+    <div class="left">
+      <img
+        src="../../../../assets/bg&img/logo.jpg"
+        alt="رستوران آدلین"
+        draggable="false"
+      />
+      <h4>رستوران آدلین</h4>
+    </div>
+  </div>
+  <div class="second">
+    <div class="right">
+      <h5>
+        نام مشتری:
+        {{
+          data.orderData.clientFirstName + " " + data.orderData.clientLastName
+        }}
+      </h5>
+      <h5>نشانی: {{ data.orderData.clientAddress }}</h5>
+      <h5>شماره تماس: {{ data.orderData.clientPhoneNumber }}</h5>
+    </div>
+    <div class="left">
+      <h5>
+        نوع سفارش:
+        {{ data.orderData.orderType == "رزرو میز" ? "حضوری" : "غیر حضوری" }}
+      </h5>
+      @if (data.orderData.orderType == "رزرو میز") {
+      <h5>شماره میز: {{ data.orderData.table }}</h5>
+      }
+      <h5>
+        وضعیت پرداخت:
+        {{ data.orderData.isPaid == true ? "پرداخت شده" : "پرداخت نشده" }}
+      </h5>
+    </div>
+  </div>
+  <div class="third">
+    <div class="table">
+      <table mat-table [dataSource]="foods" [dir]="'rtl'">
+        <ng-container matColumnDef="ردیف">
+          <th mat-header-cell *matHeaderCellDef>ردیف</th>
+          <td mat-cell *matCellDef="let order">
+            {{ foods.indexOf(order) + 1 }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="سفارش">
+          <th mat-header-cell *matHeaderCellDef>سفارش</th>
+          <td mat-cell *matCellDef="let order">{{ order.name }}</td>
+        </ng-container>
+        <ng-container matColumnDef="تعداد">
+          <th mat-header-cell *matHeaderCellDef>تعداد</th>
+          <td mat-cell *matCellDef="let order">1</td>
+        </ng-container>
+        <ng-container matColumnDef="تخفیف">
+          <th mat-header-cell *matHeaderCellDef>تخفیف</th>
+          <td mat-cell *matCellDef="let order">
+            @if( order.discountPercentage != 0 ){
+            {{ "%" + order.discountPercentage }} } @else { _ }
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="قیمت نهایی">
+          <th mat-header-cell *matHeaderCellDef>قیمت نهایی</th>
+          <td mat-cell *matCellDef="let order">
+            {{ order.price - order.price * (order.discountPercentage / 100) }}
+            تومان
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+    <div class="prices">
+      <div>
+        <h5>مبلغ بدون تخفیف: {{ totalPrice }} تومان</h5>
+      </div>
+      <div>
+        <h5>تخفیف: {{ totalDiscount }} تومان</h5>
+      </div>
+      <div>
+        <h5>مبلغ قابل پرداخت: {{ finalPrice }} تومان</h5>
+      </div>
+    </div>
+  </div>
+  <div id="buttonsDiv" [ngStyle]="{ display: printMode ? 'none' : 'flex' }">
+    <button type="button" id="close" mat-flat-button matDialogClose>
+      بستن
+    </button>
+    <button type="button" id="print" (click)="printFacture()" mat-flat-button>
+      چاپ فاکتور
+    </button>
+  </div>
+  <div id="thanksMsgDiv" [ngStyle]="{ display: printMode ? 'block' : 'none' }">
+    <h4>ممنون از انتخاب شما</h4>
+  </div>
+</div>

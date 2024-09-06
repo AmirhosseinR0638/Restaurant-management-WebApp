@@ -1,0 +1,50 @@
+<button
+  type="button"
+  id="closeBtn"
+  mat-icon-button
+  (click)="closeAddTableComponent()"
+>
+  <img
+    src="../../../assets/bg&img/close_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.png"
+    alt="بستن"
+  />
+</button>
+<div class="container">
+  <div class="title">
+    <h2>اضافه کردن میز</h2>
+  </div>
+  <div class="info">
+    <h3>آمار میزها:</h3>
+    <mat-chip-set>
+      <mat-chip>تعداد کل میزها: {{ numberOfAllTables }}</mat-chip>
+      <mat-chip>{{ tableWith4Capacity + " میز 4 نفره" }}</mat-chip>
+      <mat-chip>{{ tableWith8Capacity + " میز 8 نفره" }}</mat-chip>
+      <mat-chip>{{ tableWith12Capacity + " میز 4 نفره" }}</mat-chip>
+      <mat-chip>{{ tableWith16Capacity + " میز 16 نفره" }}</mat-chip>
+    </mat-chip-set>
+  </div>
+  <div class="form">
+    <form [formGroup]="tableForm" (ngSubmit)="formSubmitted()">
+      <mat-form-field hideRequiredMarker>
+        <mat-label>شماره میز</mat-label>
+        <input
+          type="number"
+          matInput
+          formControlName="tableNumber"
+        />
+      </mat-form-field>
+      <mat-form-field hideRequiredMarker>
+        <mat-label>ظرفیت میز</mat-label>
+        <mat-select formControlName="tableCapacity">
+          <mat-option value="4">4نفره</mat-option>
+          <mat-option value="8">8نفره</mat-option>
+          <mat-option value="12">12نفره</mat-option>
+          <mat-option value="16">16نفره</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-flat-button type="submit" [disabled]="tableForm.invalid">
+        اضافه کردن میز
+      </button>
+    </form>
+  </div>
+</div>

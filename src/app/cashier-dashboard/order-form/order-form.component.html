@@ -1,0 +1,181 @@
+<div class="container">
+  <button type="button" id="closeBtn" mat-icon-button (click)="closeForm()">
+    <img
+      src="../../../assets/bg&img/close_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.png"
+      alt="بستن"
+    />
+  </button>
+  <div class="content">
+    <div class="form">
+      <div class="header">
+        <h3>ثبت سفارش</h3>
+      </div>
+      <form [formGroup]="orderForm" (ngSubmit)="orderSubmitted()">
+        <mat-stepper animationDuration="500" [dir]="'rtl'">
+          <mat-step label="انتخاب اشتراک" [editable]="!formSubmitted">
+            <mat-form-field hideRequiredMarker>
+              <mat-label>انتخاب اشتراک مشتری</mat-label>
+              <input
+                type="text"
+                matInput
+                [matAutocomplete]="autoComplete"
+                formControlName="clientName"
+                (ngModelChange)="fetchClientInformation($event)"
+              />
+              <mat-autocomplete #autoComplete>
+                @for (client of clients|async; track $index) {
+                <mat-option [value]="client.firstName + ' ' + client.lastName"
+                  >{{ $index + 1 }}_ {{ client.firstName }}
+                  {{ client.lastName }}</mat-option
+                >
+                }@empty {
+                <mat-optgroup>موردی یافت نشد!</mat-optgroup>
+                }
+              </mat-autocomplete>
+            </mat-form-field>
+            <div class="buttons">
+              <button
+                type="button"
+                mat-flat-button
+                (click)="createClientAccount()"
+              >
+                اضافه کردن اشتراک
+              </button>
+              <button type="button" matStepperNext mat-flat-button>بعدی</button>
+            </div>
+          </mat-step>
+          <mat-step label="نوع سفارش" [editable]="!formSubmitted">
+            <mat-form-field hideRequiredMarker>
+              <mat-label>نوع سفارش</mat-label>
+              <mat-select
+                (selectionChange)="toggleSelectedOption($event)"
+                formControlName="orderType"
+              >
+                <mat-option value="رزرو میز">رزرو میز</mat-option>
+                <mat-option value="ارسال سفارش">ارسال سفارش</mat-option>
+              </mat-select>
+            </mat-form-field>
+            @if (selectedOption=='رزرو میز') {
+            <mat-form-field hideRequiredMarker>
+              <mat-label>شماره میز</mat-label>
+              <mat-select formControlName="reservedTable">
+                @for (table of tables|async; track $index) {
+                <mat-option [value]="table.number" [disabled]="table.isReserved"
+                  >میز شماره {{ table.number }} _ ظرفیت
+                  {{ table.capacity }} نفر</mat-option
+                >
+                }
+              </mat-select>
+            </mat-form-field>
+            } @else {
+            <mat-form-field hideRequiredMarker>
+              <mat-label>نام</mat-label>
+              <input matInput readonly formControlName="firstName" type="text"
+            /></mat-form-field>
+            <mat-form-field hideRequiredMarker>
+              <mat-label>نام خانودگی</mat-label>
+              <input matInput readonly formControlName="lastName" type="text"
+            /></mat-form-field>
+            <mat-form-field hideRequiredMarker>
+              <mat-label>آدرس</mat-label>
+              <input matInput formControlName="address" type="text"
+            /></mat-form-field>
+            <mat-form-field hideRequiredMarker>
+              <mat-label>شماره تلفن</mat-label>
+              <input matInput formControlName="phoneNumber" type="number"
+            /></mat-form-field>
+            }
+            <div class="buttons">
+              <button type="button" mat-flat-button matStepperPrevious>
+                قبلی
+              </button>
+              <button type="button" mat-flat-button matStepperNext>بعدی</button>
+            </div>
+          </mat-step>
+          <mat-step label="ثبت سفارش" [editable]="!formSubmitted">
+            <mat-form-field hideRequiredMarker>
+              <mat-label>منوی غذاها</mat-label>
+              <mat-select
+                multiple
+                #selectedFoods
+                formControlName="foodMenu"
+                (selectionChange)="addToOrders(selectedFoods.value)"
+              >
+                <mat-select-trigger>{{
+                  ordered.length == 1
+                    ? ordered[0]?.name
+                    : ordered[0]?.name +
+                      " و " +
+                      (ordered.length - 1) +
+                      "مورد دیگر"
+                }}</mat-select-trigger>
+                @for (food of foods|async; track $index) {
+                <mat-option [value]="food" [disabled]="food.remindNumber == 0"
+                  >{{ food.name }}- {{ food.price + " تومان" }}
+                </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <div class="orderedFood">
+              <h4>سفارش داده شده ها:</h4>
+              @for (order of ordered; track $index) {
+              <p>
+                {{ order.name }}
+                <button
+                  type="button"
+                  mat-icon-button
+                  (click)="deleteOrder($index)"
+                >
+                  <img
+                    src="../../../assets/bg&img/delete_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.png"
+                    alt="حذف"
+                  />
+                </button>
+              </p>
+              }@empty {
+              <h6>هنوز غذایی سفارش داده نشده است!</h6>
+              }
+            </div>
+            <div class="price">
+              <div class="total">
+                <h3>
+                  @if (priceWithDiscount!=0) { {{ priceWithDiscount }} تومان}
+                </h3>
+                <h4>
+                  <del>@if (totalPrice !=0) { {{ totalPrice }} تومان}</del>
+                </h4>
+              </div>
+              <div class="paid">
+                <p>
+                  <mat-checkbox formControlName="paid"
+                    >پرداخت شده.</mat-checkbox
+                  >
+                </p>
+              </div>
+            </div>
+            <div class="buttons">
+              <button type="button" matStepperPrevious mat-flat-button>
+                قبلی
+              </button>
+              <button
+                type="submit"
+                mat-flat-button
+                [disabled]="orderForm.invalid || formSubmitted"
+              >
+                @if (!formSubmitted) { ثبت سفارش }
+                <ngx-spinner
+                  bdColor="transparent"
+                  size="small"
+                  color="#fff"
+                  type="ball-pulse"
+                  [fullScreen]="false"
+                >
+                </ngx-spinner>
+              </button>
+            </div>
+          </mat-step>
+        </mat-stepper>
+      </form>
+    </div>
+  </div>
+</div>

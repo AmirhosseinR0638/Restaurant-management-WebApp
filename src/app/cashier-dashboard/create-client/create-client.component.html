@@ -1,0 +1,40 @@
+<div class="container">
+  <button mat-icon-button id="closeBtn" type="button" (click)="closeForm()">
+    <img
+      src="../../../assets/bg&img/close_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.png"
+      alt="بستن"
+    />
+  </button>
+  <form [formGroup]="clientForm" (ngSubmit)="createClientAccount()">
+    <div class="title">
+      <h4>ایجاد اشتراک برای مشتریان</h4>
+    </div>
+    <mat-form-field hideRequiredMarker>
+      <mat-label>نام</mat-label>
+      <input type="text" matInput formControlName="firstName" />
+    </mat-form-field>
+    <mat-form-field hideRequiredMarker>
+      <mat-label>نام خانوادگی</mat-label>
+      <input type="text" matInput formControlName="lastName" />
+    </mat-form-field>
+    <mat-form-field hideRequiredMarker>
+      <mat-label>آدرس</mat-label>
+      <input type="text" matInput formControlName="address" />
+    </mat-form-field>
+    <mat-form-field hideRequiredMarker>
+      <mat-label>شماره تلفن</mat-label>
+      <input type="number" matInput formControlName="phoneNumber" />
+    </mat-form-field>
+    <button type="submit" mat-flat-button [disabled]="clientForm.invalid">
+      @if (!formSubmitted) { ایجاد اشتراک }
+      <ngx-spinner
+        bdColor="transparent"
+        size="small"
+        color="#fff"
+        type="ball-pulse"
+        [fullScreen]="false"
+      >
+      </ngx-spinner>
+    </button>
+  </form>
+</div>

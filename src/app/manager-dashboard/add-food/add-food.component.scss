@@ -1,0 +1,71 @@
+@import "../../../styles.scss";
+@include closeBtn;
+div.container {
+  width: 490px;
+  height: auto;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  background-color: $thirdColor;
+  border: 2px solid $secondColor;
+  border-radius: 8px;
+  padding: 4px 6px;
+  div.title {
+    background-color: $firstColor;
+    border: 2px solid $secondColor;
+    border-radius: 8px;
+    width: 98%;
+    h2 {
+      color: #f5f5f5;
+      text-align: center;
+    }
+  }
+  div.form {
+    background-color: $firstColor;
+    border: 2px solid $secondColor;
+    border-radius: 8px;
+    padding: 6px 0;
+    width: 98%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    form {
+      width: 94%;
+      display: flex;
+      flex-flow: column wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 3px;
+      mat-form-field {
+        width: 98%;
+      }
+      mat-form-field:nth-child(4) {
+        width: 60%;
+      }
+      div.inside {
+        width: 98%;
+        display: flex;
+        justify-content: space-between;
+        mat-form-field:first-child {
+          width: 68%;
+        }
+        mat-form-field:nth-child(2) {
+          width: 30%;
+        }
+      }
+      button {
+        margin: 0 0 4px;
+        width: 98%;
+        background-color: $secondColor;
+        color: #f5f5f5;
+        border: 2px solid #f5f5f5;
+        border-radius: 8px;
+      }
+      button:disabled {
+        opacity: 0.7;
+      }
+    }
+  }
+}

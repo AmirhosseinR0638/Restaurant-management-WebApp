@@ -1,0 +1,105 @@
+@import "./../../../../styles.scss";
+div.container {
+  width: 98%;
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  margin: 3px auto;
+  padding: 2px 4px;
+  div {
+    width: 98%;
+    margin: 0 auto;
+    height: auto;
+  }
+  div.first {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid $secondColor;
+    div.left {
+      text-align: center;
+      width: 29%;
+      border-radius: 6px;
+      img {
+        width: 100%;
+        height: 80px;
+        border-radius: 6px;
+      }
+      h4 {
+        margin: 0;
+      }
+    }
+    div.right {
+      width: 69%;
+      div.down {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+      }
+    }
+  }
+  div.second {
+    display: flex;
+    border-bottom: 2px solid $secondColor;
+    div.right {
+      width: 70%;
+    }
+    div.left {
+      width: 30%;
+    }
+  }
+  div.third {
+    padding-bottom: 3px;
+    // border-bottom: 2px solid $secondColor;
+    div.table {
+      width: 100%;
+      table {
+        margin: 7px auto;
+        border: 2px solid $secondColor;
+        border-radius: 8px;
+        th,
+        td {
+          border-radius: 8px;
+        }
+      }
+    }
+    div.prices {
+      width: 100%;
+      display: flex;
+      flex-flow: row nowrap;
+      gap: 2px;
+      div {
+        border: 2px solid $secondColor;
+        width: 32%;
+        border-radius: 8px;
+        h5 {
+          text-align: center;
+        }
+      }
+    }
+  }
+  div#buttonsDiv {
+    width: 98%;
+    padding: 12px 0;
+    display: flex;
+    justify-content: space-between;
+    button {
+      border: 2px solid $secondColor;
+      border-radius: 8px;
+    }
+    button#close {
+      width: 18%;
+    }
+    button#print {
+      width: 78%;
+    }
+    button:hover {
+      cursor: pointer;
+    }
+  }
+  div#thanksMsgDiv {
+    display: none;
+    h4 {
+      text-align: center;
+    }
+  }
+}

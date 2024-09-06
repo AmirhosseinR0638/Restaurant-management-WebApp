@@ -1,0 +1,61 @@
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-fussion"
+  [fullScreen]="true"
+>
+  <p style="color: white">لطفا چند لحظه صبر کنید...</p>
+</ngx-spinner>
+<!-- fullscreen loader -->
+<div class="container">
+  <div class="up">
+    <div class="logo">
+      <img
+        src="../../assets/bg&img/logo-removebg.png"
+        alt="رستوران آدلین"
+        draggable="false"
+      />
+    </div>
+    <div class="name">رستوران آدلین</div>
+  </div>
+  <div class="down">
+    <h4>ورود به عنوان:</h4>
+    <mat-button-toggle-group
+      hideSingleSelectionIndicator
+      (change)="changeFormMode($event)"
+    >
+      <mat-button-toggle checked value="پیشخدمت">پیشخدمت</mat-button-toggle>
+      <mat-button-toggle value="صندوقدار">صندوقدار</mat-button-toggle>
+      <mat-button-toggle value="مدیر">مدیر</mat-button-toggle>
+    </mat-button-toggle-group>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <mat-form-field hideRequiredMarker>
+        <mat-label>نام کاربری</mat-label>
+        <input type="text" matInput formControlName="username" />
+        <mat-hint
+          [hidden]="
+            loginForm.controls['username'].untouched ||
+            loginForm.controls['username'].valid
+          "
+          >نام کاربری معتبر نمی باشد!</mat-hint
+        >
+      </mat-form-field>
+      <mat-form-field hideRequiredMarker>
+        <mat-label>رمز عبور</mat-label>
+        <input type="password" matInput formControlName="password" />
+        <mat-hint
+          [hidden]="
+            loginForm.controls['password'].untouched ||
+            loginForm.controls['password'].valid
+          "
+          >رمز عبور معتبر نمی باشد!</mat-hint
+        >
+      </mat-form-field>
+      <button type="submit" mat-raised-button [disabled]="loginForm.invalid">
+        ورود به عنوان
+        {{ formMode }}
+      </button>
+    </form>
+  </div>
+</div>

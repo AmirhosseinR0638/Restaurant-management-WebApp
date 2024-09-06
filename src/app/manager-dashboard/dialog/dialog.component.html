@@ -1,0 +1,17 @@
+<!-- for showing confirm message to delete a record of a table -->
+<mat-dialog-content>
+  <h4>{{ data.message }}</h4>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button type="button" mat-raised-button [mat-dialog-close]="false">
+    خیر
+  </button>
+  <button
+    type="button"
+    class="delete"
+    mat-raised-button
+    [mat-dialog-close]="true"
+  >
+    بله
+  </button>
+</mat-dialog-actions>

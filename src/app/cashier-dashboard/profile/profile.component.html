@@ -1,0 +1,23 @@
+<div class="container">
+  <h4>پروفایل صندوقدار</h4>
+  <div class="picture">
+    <img
+      [src]="
+        cashierInformation.gender == 'آقا'
+          ? '../../../assets/bg&img/manWithoutProfile.png'
+          : '../../../assets/bg&img/womanWithoutProfile.png'
+      "
+      alt="picture"
+      draggable="false"
+    />
+  </div>
+  <div class="info">
+    <p>نام: {{ cashierInformation.firstName }}</p>
+    <p>نام خانوادگی: {{ cashierInformation.lastName }}</p>
+    <p>جنسیت: {{ cashierInformation.gender }}</p>
+    <p>سن: {{ cashierInformation.age }} سال</p>
+    <p>نام کاربری: {{ cashierInformation.userName }}</p>
+    <p>رمز عبور: {{ cashierInformation.password }}</p>
+    <p>حقوق دریافتی: {{ cashierInformation.salary }} تومان</p>
+  </div>
+</div>

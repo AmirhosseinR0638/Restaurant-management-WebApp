@@ -1,1 +1,165 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use "@angular/material" as mat;
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$AngularApp1-primary: mat.define-palette(mat.$indigo-palette);
+$AngularApp1-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$AngularApp1-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$AngularApp1-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $AngularApp1-primary,
+      accent: $AngularApp1-accent,
+      warn: $AngularApp1-warn,
+    ),
+    typography: mat.define-typography-config(),
+    density: 0,
+  )
+);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($AngularApp1-theme);
+
 /* You can add global styles to this file, and also import other style files */
+
+$firstColor: #fcbf49;
+$secondColor: #003049;
+$thirdColor: #f77f00;
+$forthColor: #eae2b7;
+$fifthColor: #d62828;
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  --mat-stepper-header-selected-state-label-text-color: #f5f5f5;
+  --mdc-checkbox-selected-focus-icon-color: #009947;
+  --mdc-checkbox-selected-icon-color: #009947;
+  --mdc-checkbox-selected-pressed-icon-color: #009947;
+  --mat-table-header-headline-color: #d62828;
+  --mat-table-header-headline-weight: 700;
+}
+.mat-mdc-radio-button.mat-accent {
+  --mdc-radio-selected-icon-color: #009999;
+  --mdc-radio-selected-pressed-icon-color: #009999;
+  --mdc-radio-selected-hover-icon-color: #009999;
+}
+.mat-sort-header-content {
+  margin: 4px auto;
+  font-size: 0.9em;
+}
+body {
+  margin: 0;
+}
+* {
+  direction: rtl;
+  font-family: mainFont;
+}
+.successful {
+  --mdc-snackbar-supporting-text-font: mainFont;
+  --mdc-snackbar-supporting-text-size: 1em;
+  --mdc-snackbar-supporting-text-weight: 700;
+  --mdc-snackbar-container-color: #003049;
+  --mdc-snackbar-supporting-text-color: #fcbf49;
+}
+.error {
+  --mdc-snackbar-supporting-text-font: mainFont;
+  --mdc-snackbar-supporting-text-size: 1em;
+  --mdc-snackbar-supporting-text-weight: 700;
+  --mdc-snackbar-container-color: #d62828;
+  --mdc-snackbar-supporting-text-color: #fcbf49;
+}
+.isPaid {
+  background-color: #027902;
+}
+.notPaid {
+  background-color: $thirdColor;
+}
+.isReserved {
+  background-color: $fifthColor;
+}
+.notReserved {
+  background-color: #027902;
+}
+.backdrop {
+  background-color: #0000009a;
+}
+.isLoggedIn {
+  background-color: #009947;
+}
+.notLoggedIn {
+  background-color: $thirdColor;
+}
+@mixin closeBtn {
+  button#closeBtn {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    background-color: $fifthColor;
+  }
+}
+@mixin profileBtnStyle {
+  button,
+  div.profile {
+    border: 2px solid $forthColor;
+    border-radius: 8px;
+    background-color: $secondColor;
+    margin: 0 6px;
+    color: #f5f5f5;
+    cursor: default;
+    width: fit-content;
+    display: flex;
+    flex-flow: row-reverse nowrap;
+    gap: 4px;
+    justify-content: center;
+    align-items: center;
+    padding: 2px 6px;
+    a {
+      color: #f5f5f5;
+      text-decoration: none;
+    }
+    div.image {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: $fifthColor;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+  button:hover {
+    cursor: pointer;
+  }
+}
+@mixin refreshBtnStyle {
+  button {
+    background-color: #109e10;
+    border: 2px solid $secondColor;
+  }
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+@font-face {
+  font-family: mainFont;
+  src: url(".//assets/fonts/iranyekanwebregular.e31c09af.woff2");
+}

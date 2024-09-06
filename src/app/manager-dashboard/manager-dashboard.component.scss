@@ -1,0 +1,225 @@
+@import "../../styles.scss";
+@mixin containerStyles {
+  background-color: $firstColor;
+  border: 2px solid $secondColor;
+  border-radius: 8px;
+  padding: 3px 4px;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: space-around;
+  align-items: center;
+  div.title {
+    padding-top: 4px;
+    height: 64px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    mat-form-field {
+      padding-top: 6px;
+      width: 340px;
+      height: 70px;
+    }
+    div.right {
+      width: 30%;
+      h3 {
+        margin-right: 16px;
+        text-align: right;
+        font-size: 1.2em;
+        color: $secondColor;
+      }
+    }
+    div.left {
+      font-size: 10px;
+      display: flex;
+      flex-flow: row-reverse nowrap;
+      justify-content: space-between;
+      align-items: center;
+      width: 70%;
+      margin: 3px 12px 0 3px;
+      span {
+        font-size: 12px;
+      }
+      .mat-mdc-radio-button {
+        --mdc-form-field-label-text-size: 12px;
+      }
+    }
+  }
+}
+@mixin tableContainer {
+  div.tableContainer {
+    border: 2px solid $secondColor;
+    border-radius: 8px;
+    overflow-y: auto;
+    height: 225px;
+    width: 96%;
+    table {
+      background-color: #f5f5f5;
+      tr {
+        th {
+          text-align: center;
+          color: $fifthColor;
+          font-weight: 600;
+          margin: 4px 6px;
+        }
+      }
+    }
+  }
+}
+table {
+  width: 100%;
+  overflow-x: auto;
+}
+th,
+tr,
+td {
+  transition: all 0.4s;
+  text-align: center;
+}
+td {
+  font-size: 0.9em;
+  font-weight: 500;
+}
+.mat-mdc-row .mat-mdc-cell {
+  border-bottom: 1px solid transparent;
+  border-top: 1px solid transparent;
+}
+.mat-mdc-row:hover .mat-mdc-cell {
+  border-color: $secondColor;
+}
+div.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
+  div.menu {
+    width: 98%;
+    margin: 8px 0;
+    border: 2px solid $secondColor;
+    border-radius: 8px;
+    background-color: $thirdColor;
+    padding: 8px 3px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    button {
+      margin: 3px 4px;
+      background-color: $secondColor;
+      color: $forthColor;
+      border-radius: 8px;
+      border: 2px solid $forthColor;
+    }
+    div.left {
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+    }
+  }
+  div.content {
+    width: 97%;
+    height: 86%;
+    div.top {
+      margin: 0 auto 4px;
+      width: 98%;
+      height: 50%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      div.foods {
+        @include containerStyles;
+        width: 54%;
+        @include tableContainer;
+        div.title {
+          justify-content: space-between;
+          div.left {
+            width: 85%;
+            mat-form-field {
+              width: 45%;
+            }
+            div {
+              width: 50%;
+              mat-slider {
+                width: 40%;
+              }
+            }
+          }
+          div.right {
+            width: 15%;
+          }
+        }
+      }
+      div.orders {
+        @include containerStyles;
+        width: 44%;
+        @include tableContainer;
+        div.left {
+          mat-form-field {
+            width: 85%;
+          }
+        }
+      }
+    }
+    div.bottom {
+      margin: 0 auto;
+      width: 98%;
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: space-between;
+      align-items: center;
+      div.clients {
+        @include containerStyles;
+        width: 47%;
+        @include tableContainer;
+        div.title {
+          justify-content: space-between;
+          div.left {
+            width: 85%;
+            mat-form-field {
+              width: 45%;
+            }
+            div {
+              width: 50%;
+              mat-slider {
+                width: 40%;
+              }
+            }
+          }
+          div.right {
+            width: 15%;
+          }
+        }
+      }
+      div.employees {
+        @include containerStyles;
+        width: 51%;
+        @include tableContainer;
+        div.tableContainer {
+          width: 99%;
+        }
+      }
+    }
+  }
+}
+app-employment,
+app-add-food,
+app-add-table,
+app-chart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  background-color: rgba(17, 25, 40, 0.2);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.125);
+  position: absolute;
+  margin: 0 auto;
+  z-index: 3;
+}

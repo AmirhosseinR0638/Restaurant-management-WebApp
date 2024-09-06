@@ -1,0 +1,619 @@
+@if (showEmploymentComp) {
+<app-employment
+  (hideEmploymentComponent)="toggleVisibilityEmploymentComp(false)"
+  (refetchEmployees)="fetchEmployees()"
+></app-employment>
+} @if (showAddFoodComp) {
+<app-add-food
+  (hideAddFoodComponent)="toggleVisibilityAddFoodComp(false)"
+  (refetchFood)="fetchFoodList()"
+></app-add-food>
+} @if (showAddTableComp) {
+<app-add-table
+  (hideAddTableComponent)="toggleVisibilityAddTableComp(false)"
+></app-add-table>
+} @if (showChartComponent) {
+<app-chart (hideChartComponent)="toggleVisibilityChartComp(false)"></app-chart>
+}
+<div class="container">
+  <div class="menu">
+    <div class="right">
+      <button
+        type="button"
+        mat-flat-button
+        (click)="toggleVisibilityEmploymentComp(true)"
+      >
+        استخدام صندوقدار/پیشخدمت
+      </button>
+      <button
+        type="button"
+        mat-flat-button
+        (click)="toggleVisibilityAddFoodComp(true)"
+      >
+        اضافه کردن غذا
+      </button>
+      <button
+        type="button"
+        mat-flat-button
+        (click)="toggleVisibilityAddTableComp(true)"
+      >
+        اضافه کردن میز
+      </button>
+      <button
+        type="button"
+        mat-flat-button
+        (click)="toggleVisibilityChartComp(true)"
+      >
+        نمایش نمودار سفارشات
+      </button>
+    </div>
+    <div class="left">
+      <button
+        type="button"
+        mat-icon-button
+        matTooltip="بارگزاری مجدد داده ها"
+        (click)="refetchData()"
+      >
+        <img
+          src="../../assets/bg&img/refresh_24dp_5F6368_FILL0_wght400_GRAD0_opsz24.png"
+          alt="بارگذاری مجدد"
+          title="بارگذاری مجدد"
+        />
+      </button>
+      <button type="button" mat-flat-button (click)="logOut()">خروج</button>
+    </div>
+  </div>
+  <div class="content">
+    <div class="top">
+      <div class="foods">
+        <div class="title">
+          <div class="right">
+            <h3>غداها</h3>
+          </div>
+          <div class="left">
+            <mat-form-field>
+              <mat-label>جستجو با نام یا شناسه</mat-label>
+              <input matInput type="search" (input)="searchFoods($event)" />
+            </mat-form-field>
+            <div>
+              <mat-label>فیلتر کردن براساس قیمت غذاها: </mat-label>
+              <mat-slider
+                [step]="10000"
+                [discrete]="true"
+                [max]="maxFoodPrice"
+                [min]="minFoodPrice"
+                [showTickMarks]="true"
+              >
+                <input
+                  matSliderStartThumb
+                  (change)="filterFoods()"
+                  [(value)]="foodPriceMax"
+                />
+                <input
+                  matSliderEndThumb
+                  (change)="filterFoods()"
+                  [(value)]="foodPriceMin"
+                />
+              </mat-slider>
+            </div>
+          </div>
+        </div>
+        <div class="tableContainer">
+          <table matSort (matSortChange)="sortFoods($event)">
+            <tr>
+              @for (header of foodTableHeader; track $index) {
+              <th
+                [disabled]="header.isDisabled"
+                [mat-sort-header]="header.name"
+              >
+                {{ header.name }}
+              </th>
+              }
+            </tr>
+            @for (food of foods; track $index) {
+            <tr>
+              <td>{{ $index + 1 }}</td>
+              <td>{{ food.foodId }}</td>
+              <td>
+                @if (foodTableOnEdit && inputIndex ==$index) {
+                <mat-form-field>
+                  <mat-label>نام آیتم غذایی</mat-label>
+                  <input matInput type="text" #foodName [value]="food.name" />
+                </mat-form-field>
+                } @else {
+                {{ food.name }}
+                }
+              </td>
+              <td>
+                @if (foodTableOnEdit && inputIndex ==$index) {
+                <mat-form-field>
+                  <mat-label>قیمت</mat-label>
+                  <input matInput type="text" #foodPrice [value]="food.price" />
+                </mat-form-field>
+                } @else {
+                {{ food.price + " تومان" }}
+                }
+              </td>
+              <td>
+                @if (foodTableOnEdit && inputIndex ==$index) {
+                <mat-form-field>
+                  <mat-label>تخفیف</mat-label>
+                  <input
+                    matInput
+                    type="text"
+                    #foodDiscount
+                    [value]="food.discountPercentage"
+                  />
+                </mat-form-field>
+                } @else {
+                {{
+                  food.discountPercentage == 0
+                    ? "_"
+                    : food.discountPercentage + "%"
+                }}
+                }
+              </td>
+              <td>
+                @if (foodTableOnEdit && (inputIndex == $index)) {
+                <button
+                  type="button"
+                  mat-icon-button
+                  (click)="editFood(food.id)"
+                >
+                  <mat-icon
+                    ><img
+                      src="../../assets/bg&img/done.png"
+                      alt="ویرایش"
+                      title="ویرایش"
+                  /></mat-icon>
+                </button>
+                } @else {
+                <button
+                  type="button"
+                  mat-icon-button
+                  (click)="switchOnEditMode('foods', $index)"
+                >
+                  <mat-icon
+                    ><img
+                      src="../../assets/bg&img/edit.png"
+                      alt="ویرایش"
+                      title="ویرایش"
+                  /></mat-icon>
+                </button>
+                }
+              </td>
+              <td>
+                <button
+                  type="button"
+                  mat-icon-button
+                  (click)="deleteFood(food.id, food.name)"
+                >
+                  <mat-icon
+                    ><img
+                      src="../../assets/bg&img/delete3.png"
+                      alt="حذف"
+                      title="حذف"
+                  /></mat-icon>
+                </button>
+              </td>
+            </tr>
+            }
+          </table>
+        </div>
+      </div>
+      <div class="orders">
+        <div class="title">
+          <div class="right"><h3>سفارشات ثبت شده</h3></div>
+          <div class="left">
+            <mat-form-field>
+              <mat-label>جستجو با کدسفارش، نام سفارش دهنده یا تاریخ</mat-label>
+              <input type="text" matInput (input)="searchOrders($event)" />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="tableContainer">
+          <table mat-table [dataSource]="orders">
+            <ng-container matColumnDef="ردیف">
+              <th mat-header-cell *matHeaderCellDef>ردیف</th>
+              <td mat-cell *matCellDef="let order">
+                {{ orders.indexOf(order) + 1 }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="کد سفارش">
+              <th mat-header-cell *matHeaderCellDef>کد سفارش</th>
+              <td mat-cell *matCellDef="let order">
+                {{ order.orderId }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="نام سفارش دهنده">
+              <th mat-header-cell *matHeaderCellDef>نام سفارش دهنده</th>
+              <td mat-cell *matCellDef="let order">
+                {{ order.clientName }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="نوع سفارش">
+              <th mat-header-cell *matHeaderCellDef>نوع سفارش</th>
+              <td mat-cell *matCellDef="let order">
+                {{ order.orderType == "رزرو میز" ? "حضوری" : "غیرحضوری" }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="تاریخ">
+              <th mat-header-cell *matHeaderCellDef>تاریخ</th>
+              <td mat-cell *matCellDef="let order">
+                {{ order.date }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="قیمت">
+              <th mat-header-cell *matHeaderCellDef>قیمت</th>
+              <td mat-cell *matCellDef="let order">
+                {{ order.totalPrice + " تومان" }}
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="orderTableHeader"></tr>
+            <tr mat-row *matRowDef="let row; columns: orderTableHeader"></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="bottom">
+      <div class="employees">
+        <div class="title">
+          <div class="right"><h3>کارکنان رستوران</h3></div>
+          <div class="left">
+            <mat-radio-group (change)="filterEmployees($event)">
+              <span>فلیتر کردن براساس: </span>
+              <mat-radio-button [value]="'none'" checked="true"
+                >هیچ کدام</mat-radio-button
+              >
+              <mat-radio-button [value]="'opt1'">صندوقداران</mat-radio-button>
+              <mat-radio-button [value]="'opt2'">پیشخدمت ها</mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+        <div class="tableContainer">
+          <table mat-table [dataSource]="employees">
+            <ng-container matColumnDef="ردیف">
+              <th mat-header-cell *matHeaderCellDef>ردیف</th>
+              <td
+                mat-cell
+                *matCellDef="let employee"
+                [ngClass]="{
+                  isLoggedIn: employee.isLoggedIn,
+                  notLoggedIn: !employee.isLoggedIn
+                }"
+                matTooltipPosition="left"
+                [matTooltip]="
+                  employee.isLoggedIn
+                    ? 'مشغول به کار می باشد.'
+                    : 'هنوز وارد پورتال خود نشده است.'
+                "
+              >
+                {{ employees.indexOf(employee) + 1 }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="نام">
+              <th mat-header-cell *matHeaderCellDef>نام</th>
+              <td mat-cell *matCellDef="let employee">
+                @if (employeeTableOnEdit && (inputIndex ==
+                employees.indexOf(employee))) {
+                <mat-form-field>
+                  <mat-label>نام</mat-label>
+                  <input
+                    matInput
+                    type="text"
+                    [value]="employee.firstName"
+                    #employeeFirstName
+                  />
+                </mat-form-field>
+                } @else {
+                {{ employee.firstName }}
+                }
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="نام خانوادگی">
+              <th mat-header-cell *matHeaderCellDef>نام خانوادگی</th>
+              <td mat-cell *matCellDef="let employee">
+                @if (employeeTableOnEdit && (inputIndex ==
+                employees.indexOf(employee))) {
+                <mat-form-field>
+                  <mat-label>نام خانودگی</mat-label>
+                  <input
+                    matInput
+                    type="text"
+                    [value]="employee.lastName"
+                    #employeeLastName
+                  />
+                </mat-form-field>
+                } @else {
+                {{ employee.lastName }}
+                }
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="سمت">
+              <th mat-header-cell *matHeaderCellDef>سمت</th>
+              <td mat-cell *matCellDef="let employee">{{ employee.post }}</td>
+            </ng-container>
+            <ng-container matColumnDef="نام کاربری">
+              <th mat-header-cell *matHeaderCellDef>نام کاربری</th>
+              <td mat-cell *matCellDef="let employee">
+                @if (employeeTableOnEdit && (inputIndex ==
+                employees.indexOf(employee))) {
+                <mat-form-field>
+                  <mat-label>نام کاربری</mat-label>
+                  <input
+                    matInput
+                    type="text"
+                    [value]="employee.userName"
+                    #employeeUserName
+                  />
+                </mat-form-field>
+                } @else {
+                {{ employee.userName }}
+                }
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="رمز عبور">
+              <th mat-header-cell *matHeaderCellDef>رمز عبور</th>
+              <td mat-cell *matCellDef="let employee">
+                @if (employeeTableOnEdit && (inputIndex ==
+                employees.indexOf(employee))) {
+                <mat-form-field>
+                  <mat-label>رمز عبور</mat-label>
+                  <input
+                    matInput
+                    type="text"
+                    [value]="employee.password"
+                    #employeePassword
+                  />
+                </mat-form-field>
+                } @else {
+                {{ employee.password }}
+                }
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="حقوق دریافتی">
+              <th mat-header-cell *matHeaderCellDef>حقوق دریافتی</th>
+              <td mat-cell *matCellDef="let employee">
+                @if (employeeTableOnEdit && (inputIndex ==
+                employees.indexOf(employee))) {
+                <mat-form-field>
+                  <mat-label>حقوق دریافتی</mat-label>
+                  <input
+                    matInput
+                    type="text"
+                    [value]="employee.salary"
+                    #employeeSalary
+                  />
+                </mat-form-field>
+                } @else {
+                {{ employee.salary + " تومان" }}
+                }
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="ویرایش">
+              <th mat-header-cell *matHeaderCellDef>ویرایش</th>
+              <td mat-cell *matCellDef="let employee">
+                @if (employeeTableOnEdit && (inputIndex ==
+                employees.indexOf(employee))) {
+                <button
+                  type="button"
+                  mat-icon-button
+                  (click)="editEmployee(employee.post, employee.id)"
+                >
+                  <mat-icon
+                    ><img
+                      src="../../assets/bg&img/done.png"
+                      alt="ویرایش"
+                      title="ویرایش"
+                  /></mat-icon>
+                </button>
+                } @else {
+                <button
+                  type="button"
+                  mat-icon-button
+                  (click)="
+                    switchOnEditMode('employees', employees.indexOf(employee))
+                  "
+                >
+                  <mat-icon
+                    ><img
+                      src="../../assets/bg&img/edit.png"
+                      alt="ویرایش"
+                      title="ویرایش"
+                  /></mat-icon>
+                </button>
+                }
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="حذف">
+              <th mat-header-cell *matHeaderCellDef>حذف</th>
+              <td mat-cell *matCellDef="let employee">
+                <button
+                  (click)="
+                    deleteEmployee(
+                      employee.post,
+                      employee.id,
+                      employee.firstName + ' ' + employee.lastName
+                    )
+                  "
+                  type="button"
+                  mat-icon-button
+                >
+                  <mat-icon
+                    ><img
+                      src="../../assets/bg&img/delete3.png"
+                      alt="حذف"
+                      title="حذف"
+                  /></mat-icon>
+                </button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="employeeTableHeader"></tr>
+            <tr
+              mat-row
+              *matRowDef="let row; columns: employeeTableHeader"
+              #test
+            ></tr>
+          </table>
+        </div>
+      </div>
+      <div class="clients">
+        <div class="title">
+          <div class="right"><h3>مشتریان</h3></div>
+          <div class="left">
+            <mat-form-field>
+              <mat-label>جستجو با نام یا نام خانوادگی</mat-label>
+              <input type="search" matInput (input)="searchClients($event)" />
+            </mat-form-field>
+            <div>
+              <mat-label>فیلتر کردن بر اساس مبلغ سفارش: </mat-label>
+              <mat-slider
+                [step]="10000"
+                [discrete]="true"
+                [max]="maxClientsOrderAmount"
+                [min]="minClientsOrderAmount"
+                [showTickMarks]="true"
+              >
+                <input
+                  matSliderStartThumb
+                  (change)="filterClients()"
+                  [(value)]="clientOrderMax"
+                />
+                <input
+                  matSliderEndThumb
+                  (change)="filterClients()"
+                  [(value)]="clientOrderMin"
+                />
+              </mat-slider>
+            </div>
+          </div>
+        </div>
+        <div class="tableContainer">
+          <table matSort (matSortChange)="sortClients($event)">
+            <tr>
+              @for (header of clientTableHeader; track $index) {
+              <th
+                [mat-sort-header]="header.name"
+                [disabled]="header.isDisabled"
+              >
+                {{ header.name }}
+              </th>
+              }
+            </tr>
+            @for (client of clients; track $index) {
+            <tr>
+              <td>{{ $index + 1 }}</td>
+              <td>
+                @if (clientsTableOnEdit && inputIndex == $index) {
+                <mat-form-field>
+                  <mat-label>نام مشتری</mat-label>
+                  <input
+                    matInput
+                    type="text"
+                    #clientFirstName
+                    [value]="client.firstName"
+                  />
+                </mat-form-field>
+                }@else {
+                {{ client.firstName }}
+                }
+              </td>
+              <td>
+                @if (clientsTableOnEdit && inputIndex == $index) {
+                <mat-form-field>
+                  <mat-label>نام خانوادگی مشتری</mat-label>
+                  <input
+                    matInput
+                    type="text"
+                    #clientLastName
+                    [value]="client.lastName"
+                  />
+                </mat-form-field>
+                }@else {
+                {{ client.lastName }}
+                }
+              </td>
+              <td>
+                @if (clientsTableOnEdit && inputIndex == $index) {
+                <mat-form-field>
+                  <mat-label>نشانی مشتری</mat-label>
+                  <input
+                    matInput
+                    type="text"
+                    #clientAddress
+                    [value]="client.address"
+                  />
+                </mat-form-field>
+                }@else {
+                {{ client.address }}
+                }
+              </td>
+              <td>
+                @if (clientsTableOnEdit && inputIndex == $index) {
+                <mat-form-field>
+                  <mat-label>تلفن مشتری</mat-label>
+                  <input
+                    matInput
+                    type="text"
+                    #clientPhoneNumber
+                    [value]="client.phoneNumber"
+                  />
+                </mat-form-field>
+                }@else {
+                {{ client.phoneNumber }}
+                }
+              </td>
+              <td>{{ client.amountOfOrders + " تومان" }}</td>
+              <td>
+                @if (clientsTableOnEdit && (inputIndex == $index)) {
+                <button
+                  type="button"
+                  mat-icon-button
+                  (click)="editClient(client.id)"
+                >
+                  <mat-icon
+                    ><img
+                      src="../../assets/bg&img/done.png"
+                      alt="ویرایش"
+                      title="ویرایش"
+                  /></mat-icon>
+                </button>
+                } @else {
+                <button
+                  type="button"
+                  mat-icon-button
+                  (click)="switchOnEditMode('clients', clients.indexOf(client))"
+                >
+                  <mat-icon
+                    ><img
+                      src="../../assets/bg&img/edit.png"
+                      alt="ویرایش"
+                      title="ویرایش"
+                  /></mat-icon>
+                </button>
+                }
+              </td>
+              <td>
+                <button
+                  type="button"
+                  mat-icon-button
+                  (click)="
+                    deleteClient(client.id, client.firstName, client.lastName)
+                  "
+                >
+                  <mat-icon
+                    ><img
+                      src="../../assets/bg&img/delete3.png"
+                      alt="حذف"
+                      title="حذف"
+                  /></mat-icon>
+                </button>
+              </td>
+            </tr>
+            }
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,80 @@
+@import "../../styles.scss";
+div.container {
+  background-image: url("../../assets/bg&img/food.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
+  div.down,
+  div.up {
+    background-color: $firstColor;
+    border: 2px solid $secondColor;
+    border-radius: 8px;
+    width: 380px;
+    height: 360px;
+    padding: 0 8px;
+    display: flex;
+    flex-flow: column wrap;
+    h4 {
+      color: $secondColor;
+      font-size: 1.1em;
+    }
+    mat-button-toggle-group {
+      --mat-standard-button-toggle-selected-state-background-color: lightgreen;
+      border: 2px solid $secondColor;
+      align-self: center;
+      width: 90%;
+      margin: 0 0 5px 0;
+      mat-button-toggle {
+        width: 33%;
+        font-weight: 600;
+        border: 1px solid $secondColor;
+      }
+    }
+    form {
+      display: flex;
+      flex-flow: column wrap;
+      mat-hint {
+        color: #f44336;
+        font-weight: 700;
+      }
+      mat-form-field {
+        margin: 4px 0;
+      }
+      button {
+        margin: 12px 0 0 0;
+        background-color: $secondColor;
+        color: #f5f5f5;
+        cursor: pointer;
+        border: 2px solid #f5f5f5;
+      }
+      button:disabled {
+        opacity: 0.8;
+      }
+    }
+  }
+  div.up {
+    justify-content: space-around;
+    align-items: stretch;
+    height: 80px;
+    margin: 4px 0;
+    div.logo {
+      width: 50%;
+      height: 100%;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    div.name {
+      width: 50%;
+      color: $secondColor;
+      font-size: 1.6em;
+      font-weight: 800;
+    }
+  }
+}

@@ -1,0 +1,48 @@
+@import "./../../../styles.scss";
+div.container {
+  @include closeBtn;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  form {
+    background-color: $thirdColor;
+    border: 2px solid $secondColor;
+    border-radius: 8px;
+    width: 30%;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: center;
+    div.title {
+      width: 94%;
+      margin: 4px auto;
+      padding: 6px 0;
+      border: 2px solid $secondColor;
+      border-radius: 8px;
+      background-color: $firstColor;
+      h4 {
+        text-align: center;
+        font-size: 1.3em;
+        font-weight: 700;
+        color: $forthColor;
+        margin: 0;
+      }
+    }
+    mat-form-field {
+      width: 96%;
+    }
+    button {
+      background-color: $secondColor;
+      color: $forthColor;
+      border: 2px solid $forthColor;
+      width: 90%;
+      margin: 0 0 10px 0;
+      font-size: 1.1em;
+      font-weight: 600;
+    }
+    button:disabled {
+      opacity: 0.7;
+    }
+  }
+}

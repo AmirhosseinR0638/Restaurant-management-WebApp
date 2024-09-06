@@ -1,0 +1,27 @@
+<button
+  type="button"
+  id="closeBtn"
+  mat-icon-button
+  (click)="closeChartComponent()"
+>
+  <img
+    src="../../../assets/bg&img/close_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24.png"
+    alt="بستن"
+  />
+</button>
+<div class="container">
+  <div class="right">
+    <h3>نمودار میزان سفارشات</h3>
+    <mat-form-field>
+      <mat-select
+        dir="rtl"
+        [(value)]="chartType"
+        (valueChange)="changeType($event)"
+      >
+        <mat-option value="bar">نمایش به صورت میله ای</mat-option>
+        <mat-option value="doughnut">نمایش به صورت دایره ای</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="left"><canvas id="chart"></canvas></div>
+</div>
